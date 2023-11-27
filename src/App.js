@@ -1,22 +1,24 @@
 import logo from './logo.svg';
 import './App.css';
+import {v4 as uuidv4} from 'uuid';
+import { useEffect } from 'react';
+import { Navigate } from 'react-router-dom';
 
-function App() {
+function App({
+  setUID, uid
+}) {
+  useEffect(()=>{
+    if(!uid) setUID(uuidv4());
+  },[])
+  useEffect(()=>{
+    console.log("uid",uid);
+    sessionStorage.setItem("uid", uid);
+},[uid])
   return (
     <div className="App">
+      {uid&&<Navigate to={`/${uid}/geolocator`} replace={true}/>}
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
       </header>
     </div>
   );

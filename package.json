@@ -1,14 +1,24 @@
 {
-  "name": "recibe_data",
+  "name": "envia-data",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@react-spring/core": "^9.7.3",
+    "@react-spring/three": "^9.7.3",
+    "@react-three/drei": "^9.88.17",
+    "@react-three/fiber": "^8.15.11",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
+    "@types/three": "^0.158.3",
+    "firebase": "^10.7.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.20.0",
     "react-scripts": "5.0.1",
+    "styled-components": "^6.1.1",
+    "three": "^0.158.0",
+    "uuid": "^9.0.1",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
