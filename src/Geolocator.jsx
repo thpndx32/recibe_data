@@ -12,24 +12,41 @@ import { firestore } from "./config/firebase";
 import { collection, doc } from "firebase/firestore";
 
 const LightSphere = ({
-  color="#FFFFFF", intensity=1, position=[0, 0, 0]
-})=>{
+  color = "#FFFFFF",
+  intensity = 1,
+  position = [0, 0, 0],
+  delay = 0, // Agrega una propiedad de delay con un valor predeterminado de 0
+}) => {
+  const [showSphere, setShowSphere] = useState(false);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setShowSphere(true);
+    }, delay);
+
+    return () => clearTimeout(timeoutId); // Limpiar el timeout al desmontar el componente
+  }, [delay]);
+
   const emissiveMaterial = new THREE.MeshBasicMaterial({
-    emissive: color, // Set the emissive color
-    emissiveIntensity: intensity, // Set the emissive intensity
-    side: THREE.DoubleSide, // DoubleSide to make sure it's visible from both sides
+    emissive: color,
+    emissiveIntensity: intensity,
+    side: THREE.DoubleSide,
   });
-  return(
+
+  return (
     <>
-      <a.mesh position={position}
-      >
-        <sphereGeometry args={[0.005,32,32]} />
-        <a.meshBasicMaterial attach="material" {...emissiveMaterial}/>
-      </a.mesh>
-      <pointLight castShadow={true} position={position} intensity={intensity} color={color}/>
+      {showSphere && (
+        <>
+          <a.mesh position={position}>
+            <sphereGeometry args={[0.005, 32, 32]} />
+            <a.meshBasicMaterial attach="material" {...emissiveMaterial} />
+          </a.mesh>
+          <pointLight castShadow={true} position={position} intensity={intensity} color={color} />
+        </>
+      )}
     </>
-  )
-}
+  );
+};
 const coordinates = (
   latitude,longitude,radius
 ) =>{
@@ -119,7 +136,7 @@ export const Geolocator = () => {
                 const cordenadas = e.coordenadas?e.coordenadas:coordinates(e.Latitude,e.Longitude,radius);
                 console.log("coordenadas", cordenadas);
                 return(
-                  <LightSphere key={index} position={cordenadas} intensity={2} color="#FF0000"/>
+                  <LightSphere key={index} position={cordenadas} intensity={2} color="#FF0000" delay={index*100}/>
                 )
               })}
               {listaConductoresAdicionales.map((e,index)=>{
@@ -127,7 +144,7 @@ export const Geolocator = () => {
                 console.log("e la baina de lima",e);
                 console.log("coordenadas", cordenadas);
                 return(
-                  <LightSphere key={index} position={cordenadas} intensity={2} color="#FF8000"/>
+                  <LightSphere key={index} position={cordenadas} intensity={2} color="#FF8000" delay={index*100}/>
                 )
               })}
             </Canvas>
