@@ -1,5 +1,5 @@
 import { Canvas, useLoader } from "@react-three/fiber";
-import { useCollection } from 'react-firebase-hooks/firestore';
+import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
 import * as THREE from 'three'
 import mapamundo from "./img/8k_earth_daymap.jpg"
 import { useSpring } from '@react-spring/core'
@@ -9,7 +9,7 @@ import { Cuerpo, TheButton } from "./styles/cuerpo";
 import { useRef, useState, useEffect } from "react";
 import { useFrame } from '@react-three/fiber'
 import { firestore } from "./config/firebase";
-import { collection } from "firebase/firestore";
+import { collection, doc } from "firebase/firestore";
 
 const LightSphere = ({
   color="#FFFFFF", intensity=1, position=[0, 0, 0]
@@ -68,19 +68,41 @@ export const Geolocator = () => {
   const [longitude, setLongitude] = useState();
   const radius = 2;
   const [data, loadingData, errData] = useCollection(collection(firestore,'clientes'));
+  const [document, loadingDoc, errDoc] = useDocument(doc(firestore,'csv_files','data_generator_client'));
   const [listaConductores, setListaConductores] = useState([]);
+  useEffect(()=>{
+    if(!loadingDoc){
+    const cadena = document.data().content;
+    const palabras = cadena.split(/[,\s]+/);
+    const numeros = palabras.filter(function(e){
+      return (!isNaN(e)&&e!='');
+    })
+    let coordenadas = [];
+    numeros.forEach((e,index)=>{
+      if((index+2)%4===0){
+        coordenadas.push({
+          Latitude:e,
+        });
+      } else if ((index+1)%4===0){
+        coordenadas[coordenadas.length-1].Longitude=e;
+      }
+    })
+    console.log(coordenadas);
+    setListaConductores(coordenadas);
+  }
+  },[loadingDoc,document])
   useEffect(()=>{
     if(!loadingData){const array = data.docs.map((e)=>{
       console.log(e.data());
       return e.data();
     });
-    setListaConductores(array);}
+    if(!document)setListaConductores(array);}
   },[loadingData,data])
     navigator.geolocation.getCurrentPosition(function(position) {
-        console.log("Position is :", position);
-        console.log("Latitude is :", position.coords.latitude);
+        //console.log("Position is :", position);
+        //console.log("Latitude is :", position.coords.latitude);
         setLatitude(position.coords.latitude);
-        console.log("Longitude is :", position.coords.longitude);
+        //console.log("Longitude is :", position.coords.longitude);
         setLongitude(position.coords.longitude);
       })
     return (
@@ -92,11 +114,11 @@ export const Geolocator = () => {
                 <ambientLight intensity={0.6} />
                 <Sphere latitude={latitude} longitude={longitude} radius={radius}/>       
               <OrbitControls/>
-              {listaConductores.map((e)=>{
+              {listaConductores.map((e,index)=>{
                 const cordenadas = e.coordenadas?e.coordenadas:coordinates(e.Latitude,e.Longitude,radius);
                 console.log("coordenadas", cordenadas);
                 return(
-                  <LightSphere position={cordenadas} intensity={10} color="#FF0000"/>
+                  <LightSphere key={index} position={cordenadas} intensity={2} color="#FF0000"/>
                 )
               })}
             </Canvas>
