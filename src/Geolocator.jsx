@@ -26,7 +26,7 @@ const LightSphere = ({
         <sphereGeometry args={[0.005,32,32]} />
         <a.meshBasicMaterial attach="material" {...emissiveMaterial}/>
       </a.mesh>
-      <pointLight castShadow={true} position={position} intensity={0.2} color={color}/>
+      <pointLight castShadow={true} position={position} intensity={intensity} color={color}/>
     </>
   )
 }
@@ -75,7 +75,7 @@ export const Geolocator = () => {
       return e.data();
     });
     setListaConductores(array);}
-  },[loadingData])
+  },[loadingData,data])
     navigator.geolocation.getCurrentPosition(function(position) {
         console.log("Position is :", position);
         console.log("Latitude is :", position.coords.latitude);
