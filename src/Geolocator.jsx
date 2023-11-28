@@ -90,7 +90,7 @@ export const Geolocator = () => {
   const [listaConductores, setListaConductores] = useState([]);
   const [listaConductoresAdicionales, setListaConductoresAdicionales] = useState([]);
   useEffect(()=>{
-    if(!loadingDoc){
+    if(!loadingDoc&&document.data()){
     const cadena = document.data().content;
     const palabras = cadena.split(/[,\s]+/);
     const numeros = palabras.filter(function(e){
