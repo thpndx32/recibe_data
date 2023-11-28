@@ -58,7 +58,7 @@ const Sphere = ({
       <a.mesh ref={sphereRef} rotation={rotation} >
         <sphereGeometry args={[radius, 32, 32]}/>
         <meshStandardMaterial attach="material" map={colorMap}/>
-        <LightSphere position={coordenadas} intensity={20} color="#0000FF"/>
+        <LightSphere position={coordenadas} intensity={2} color="#0000FF"/>
       </a.mesh>
       </>
     );
@@ -96,7 +96,7 @@ export const Geolocator = () => {
                 const cordenadas = e.coordenadas?e.coordenadas:coordinates(e.Latitude,e.Longitude,radius);
                 console.log("coordenadas", cordenadas);
                 return(
-                  <LightSphere position={cordenadas} intensity={20} color="#FF0000"/>
+                  <LightSphere position={cordenadas} intensity={10} color="#FF0000"/>
                 )
               })}
             </Canvas>
