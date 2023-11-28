@@ -67,9 +67,10 @@ export const Geolocator = () => {
   const [latitude, setLatitude] = useState();
   const [longitude, setLongitude] = useState();
   const radius = 2;
-  const [data, loadingData, errData] = useCollection(collection(firestore,'clientes'));
+  const [data, loadingData, errData] = useCollection(collection(firestore,'client_data'));
   const [document, loadingDoc, errDoc] = useDocument(doc(firestore,'csv_files','data_generator_client'));
   const [listaConductores, setListaConductores] = useState([]);
+  const [listaConductoresAdicionales, setListaConductoresAdicionales] = useState([]);
   useEffect(()=>{
     if(!loadingDoc){
     const cadena = document.data().content;
@@ -96,7 +97,7 @@ export const Geolocator = () => {
       console.log(e.data());
       return e.data();
     });
-    if(!document)setListaConductores(array);}
+    setListaConductoresAdicionales(array);}
   },[loadingData,data])
     navigator.geolocation.getCurrentPosition(function(position) {
         //console.log("Position is :", position);
@@ -119,6 +120,14 @@ export const Geolocator = () => {
                 console.log("coordenadas", cordenadas);
                 return(
                   <LightSphere key={index} position={cordenadas} intensity={2} color="#FF0000"/>
+                )
+              })}
+              {listaConductoresAdicionales.map((e,index)=>{
+                const cordenadas = e.coordenadas?e.coordenadas:coordinates(e.latitude,e.longitude,radius);
+                console.log("e la baina de lima",e);
+                console.log("coordenadas", cordenadas);
+                return(
+                  <LightSphere key={index} position={cordenadas} intensity={2} color="#FF8000"/>
                 )
               })}
             </Canvas>
