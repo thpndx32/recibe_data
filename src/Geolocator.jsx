@@ -147,7 +147,7 @@ export const Geolocator = () => {
                 console.log("e la baina de lima",e);
                 console.log("coordenadas", cordenadas);
                 return(
-                  <LightSphere key={index} position={cordenadas} intensity={2} color="#FF8000" delay={index*100}/>
+                  <LightSphere key={index} position={cordenadas} intensity={2} color="#008f39" delay={index*100}/>
                 )
               })}
             </Canvas>
